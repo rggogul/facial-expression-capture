@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facial Motion Capture Stick Figure</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎭 Facial Expression Capture</h1>
+            <p>Blink your eyes and smile to see the face copy your expressions!</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="video-section">
+                <h3>Your Camera</h3>
+                <video id="input_video" width="320" height="240" autoplay muted></video>
+                <canvas id="output_canvas" width="320" height="240"></canvas>
+            </div>
+            
+            <div class="animation-section">
+                <h3>Facial Expression Mirror</h3>
+                <canvas id="stick_figure_canvas" width="400" height="400"></canvas>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="start_btn">Start Motion Capture</button>
+            <button id="stop_btn" disabled>Stop Motion Capture</button>
+            <button id="reset_btn">Reset Face</button>
+        </div>
+        
+        <div class="info">
+            <h3>How it works:</h3>
+            <ul>
+                <li>📷 The camera captures your face using computer vision</li>
+                <li>🎯 MediaPipe AI tracks 468 facial landmarks in real-time</li>
+                <li>😊 The animated face mirrors your eye blinks and smiles</li>
+                <li>📊 Live indicators show expression detection status</li>
+                <li>⚡ All processing happens in your browser - no data sent to servers!</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
