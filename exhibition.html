@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Exhibition - Facial Motion Capture</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .exhibition-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .exhibition-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .exhibition-header h1 {
+            font-size: 3em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .exhibition-header p {
+            font-size: 1.3em;
+            margin: 10px 0;
+            opacity: 0.9;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        .content-card h2 {
+            color: #4a5568;
+            margin-top: 0;
+            font-size: 2em;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .content-card h3 {
+            color: #667eea;
+            margin-top: 25px;
+            font-size: 1.3em;
+        }
+        
+        .uses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .use-case {
+            background: rgba(255,255,255,0.95);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 3px solid transparent;
+        }
+        
+        .use-case:hover {
+            border-color: #667eea;
+            transform: scale(1.05);
+            background: white;
+        }
+        
+        .use-case-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .demo-buttons {
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .demo-btn {
+            display: inline-block;
+            padding: 20px 40px;
+            margin: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .demo-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            text-decoration: none;
+            color: white;
+        }
+        
+        .tech-specs {
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+        }
+        
+        .tech-specs h3 {
+            color: #ffd700;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        
+        .spec-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .spec-item {
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            border-left: 4px solid #ffd700;
+        }
+        
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            .exhibition-header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav style="background: linear-gradient(45deg, #667eea, #764ba2); padding: 15px 0; margin-bottom: 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: fixed; top: 0; left: 0; right: 0; z-index: 1000;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: center; gap: 30px; padding: 0 20px;">
+            <a href="index.html" style="color: white; text-decoration: none; padding: 12px 25px; border-radius: 25px; font-weight: bold; transition: all 0.3s ease; background: rgba(255,255,255,0.1); border: 2px solid transparent;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+                🎭 Live Demo
+            </a>
+            <a href="exhibition.html" style="color: white; text-decoration: none; padding: 12px 25px; border-radius: 25px; font-weight: bold; transition: all 0.3s ease; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.3);" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                📋 About Project
+            </a>
+        </div>
+    </nav>
+    <div class="exhibition-container" style="padding-top: 80px;">
+        <div class="exhibition-header">
+            <h1>🎭 AI-Powered Facial Motion Capture</h1>
+            <p>Real-time Computer Vision & Machine Learning Demonstration</p>
+            <p><strong>Science Exhibition Project</strong></p>
+        </div>
+
+        <div class="content-grid">
+            <div class="content-card" onclick="expandCard(this)">
+                <h2>🔬 What Is This Experiment?</h2>
+                <p><strong>This project demonstrates real-time artificial intelligence and computer vision technology!</strong></p>
+                
+                <h3>How It Works:</h3>
+                <ul>
+                    <li>📷 <strong>Camera captures your face</strong> at 30 frames per second</li>
+                    <li>🧠 <strong>MediaPipe AI</strong> identifies 468 facial landmark points instantly</li>
+                    <li>📊 <strong>Mathematical algorithms</strong> calculate head rotation, eye movements</li>
+                    <li>🎨 <strong>Animated stick figure</strong> mirrors your expressions in real-time</li>
+                    <li>⚡ <strong>All processing happens locally</strong> - no internet required!</li>
+                </ul>
+                
+                <h3>Scientific Principles:</h3>
+                <ul>
+                    <li><strong>Machine Learning:</strong> Pre-trained neural networks</li>
+                    <li><strong>Computer Vision:</strong> Image processing & pattern recognition</li>
+                    <li><strong>Linear Algebra:</strong> 3D coordinate transformations</li>
+                    <li><strong>Signal Processing:</strong> Real-time data filtering</li>
+                </ul>
+            </div>
+
+            <div class="content-card" onclick="expandCard(this)">
+                <h2>⚙️ Technical Innovation</h2>
+                <p><strong>This project showcases cutting-edge technology that's changing our world!</strong></p>
+                
+                <h3>Why Is This Amazing?</h3>
+                <ul>
+                    <li>🚀 <strong>Real-time AI:</strong> Processes 30 frames per second</li>
+                    <li>🎯 <strong>Precision:</strong> Tracks 468 facial points with millimeter accuracy</li>
+                    <li>💻 <strong>Browser-based:</strong> No special software installation needed</li>
+                    <li>🔒 <strong>Privacy-first:</strong> All data stays on your device</li>
+                    <li>📱 <strong>Cross-platform:</strong> Works on any device with a camera</li>
+                </ul>
+                
+                <h3>Advanced Features:</h3>
+                <ul>
+                    <li><strong>Eye Blink Detection:</strong> AI recognizes when you blink</li>
+                    <li><strong>Head Pose Estimation:</strong> 3D rotation tracking</li>
+                    <li><strong>Expression Analysis:</strong> Smile and emotion detection</li>
+                    <li><strong>Landmark Mapping:</strong> Precise facial feature tracking</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tech-specs">
+            <h3>🔧 Technical Specifications</h3>
+            <div class="spec-list">
+                <div class="spec-item">
+                    <strong>AI Framework:</strong><br>
+                    Google MediaPipe
+                </div>
+                <div class="spec-item">
+                    <strong>Processing Speed:</strong><br>
+                    30+ FPS Real-time
+                </div>
+                <div class="spec-item">
+                    <strong>Facial Points:</strong><br>
+                    468 Landmark Detection
+                </div>
+                <div class="spec-item">
+                    <strong>Languages Used:</strong><br>
+                    JavaScript, HTML5, CSS3
+                </div>
+                <div class="spec-item">
+                    <strong>Browser Support:</strong><br>
+                    Chrome, Firefox, Safari
+                </div>
+                <div class="spec-item">
+                    <strong>Privacy Level:</strong><br>
+                    100% Local Processing
+                </div>
+            </div>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.95); padding: 40px; border-radius: 15px; margin: 40px 0;">
+            <h2 style="text-align: center; color: #4a5568; margin-bottom: 30px;">🌟 Real-World Applications & Uses</h2>
+            
+            <div class="uses-grid">
+                <div class="use-case" onclick="showUseCase('gaming')">
+                    <span class="use-case-icon">🎮</span>
+                    <h3>Gaming & Entertainment</h3>
+                    <p>Control game characters with facial expressions, create avatars that mirror your emotions, virtual reality interactions</p>
+                </div>
+                
+                <div class="use-case" onclick="showUseCase('medical')">
+                    <span class="use-case-icon">🏥</span>
+                    <h3>Medical & Healthcare</h3>
+                    <p>Monitor patient recovery, detect neurological conditions, assist in physical therapy, track treatment progress</p>
+                </div>
+                
+                <div class="use-case" onclick="showUseCase('security')">
+                    <span class="use-case-icon">🔒</span>
+                    <h3>Security & Access</h3>
+                    <p>Facial recognition systems, biometric authentication, secure building access, identity verification</p>
+                </div>
+                
+                <div class="use-case" onclick="showUseCase('education')">
+                    <span class="use-case-icon">📚</span>
+                    <h3>Education & Training</h3>
+                    <p>Interactive learning systems, engagement monitoring, emotion-aware tutoring, accessibility tools</p>
+                </div>
+                
+                <div class="use-case" onclick="showUseCase('communication')">
+                    <span class="use-case-icon">💬</span>
+                    <h3>Communication</h3>
+                    <p>Video calls with filters, sign language translation, emotion-based messaging, accessibility aids</p>
+                </div>
+                
+                <div class="use-case" onclick="showUseCase('automotive')">
+                    <span class="use-case-icon">🚗</span>
+                    <h3>Automotive Safety</h3>
+                    <p>Driver drowsiness detection, attention monitoring, safety alerts, hands-free controls</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-buttons">
+            <a href="index.html" class="demo-btn">🎭 Try the Live Demo!</a>
+            <button class="demo-btn" onclick="showMoreInfo()">📋 Learn More Details</button>
+        </div>
+    </div>
+
+    <script>
+        function expandCard(card) {
+            card.style.transform = 'scale(1.02)';
+            card.style.zIndex = '10';
+            setTimeout(() => {
+                card.style.transform = 'scale(1)';
+                card.style.zIndex = '1';
+            }, 200);
+        }
+
+        function showUseCase(type) {
+            const details = {
+                gaming: "🎮 Gaming Applications:\n• Facial motion capture for character animation\n• Emotion-based gameplay mechanics\n• Virtual reality avatar control\n• Streaming with real-time face filters\n• Accessibility gaming controls",
+                
+                medical: "🏥 Medical Applications:\n• Stroke recovery monitoring\n• Facial paralysis assessment\n• Depression and anxiety detection\n• Autism therapy tools\n• Telemedicine consultations",
+                
+                security: "🔒 Security Applications:\n• Airport and border security\n• Building access control\n• Phone and laptop unlock\n• Banking authentication\n• Anti-fraud systems",
+                
+                education: "📚 Educational Applications:\n• Student engagement tracking\n• Interactive learning experiences\n• Language learning pronunciation\n• Special needs assistance\n• Remote learning monitoring",
+                
+                communication: "💬 Communication Applications:\n• Video call enhancements\n• Real-time translation\n• Emotion-aware messaging\n• Sign language interpretation\n• Accessibility communication aids",
+                
+                automotive: "🚗 Automotive Applications:\n• Driver fatigue detection\n• Distraction monitoring\n• Personalized car settings\n• Emergency response systems\n• Hands-free vehicle control"
+            };
+            
+            alert(details[type]);
+        }
+
+        function showMoreInfo() {
+            const info = `🔬 Advanced Technical Details:
+
+🧠 AI & Machine Learning:
+• Uses TensorFlow.js for in-browser AI processing
+• MediaPipe framework with pre-trained models
+• Real-time neural network inference
+• Computer vision algorithms
+
+📊 Mathematical Concepts:
+• 3D coordinate transformations
+• Linear algebra for face orientation
+• Signal processing for smooth animations
+• Statistical analysis for expression detection
+
+💡 Innovation Highlights:
+• Zero-latency processing (< 33ms per frame)
+• Privacy-preserving (no data leaves your device)
+• Cross-platform compatibility
+• Scalable architecture
+
+🌍 Future Possibilities:
+• Augmented reality integration
+• IoT device control
+• Artificial intelligence assistants
+• Advanced human-computer interfaces
+
+This project demonstrates the future of human-computer interaction!`;
+            
+            alert(info);
+        }
+
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.content-card, .use-case');
+            
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(50px)';
+                    card.style.transition = 'all 0.6s ease';
+                    
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>

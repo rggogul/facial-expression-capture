@@ -1,41 +1,89 @@
 class FaceMotionCapture {
     constructor() {
-        this.videoElement = document.getElementById('input_video');
-        this.canvasElement = document.getElementById('output_canvas');
-        this.canvasCtx = this.canvasElement.getContext('2d');
-        this.stickFigureCanvas = document.getElementById('stick_figure_canvas');
-        this.stickFigureCtx = this.stickFigureCanvas.getContext('2d');
+        console.log('Starting FaceMotionCapture constructor...');
         
-        this.faceMesh = null;
-        this.camera = null;
-        this.isRunning = false;
-        
-        // Face properties
-        this.face = {
-            centerX: 200,
-            centerY: 200,
-            faceRadius: 80,
-            eyeLeftOpen: true,
-            eyeRightOpen: true,
-            isSmiling: false,
-            smileIntensity: 0,
-            leftEyeOpenness: 1.0,
-            rightEyeOpenness: 1.0
-        };
-        
-        this.initializeEventListeners();
-        this.initializeFaceMesh();
-        this.drawInitialFace();
+        try {
+            // Check for required DOM elements
+            this.videoElement = document.getElementById('input_video');
+            if (!this.videoElement) throw new Error('Video element not found');
+            
+            this.canvasElement = document.getElementById('output_canvas');
+            if (!this.canvasElement) throw new Error('Output canvas not found');
+            
+            this.canvasCtx = this.canvasElement.getContext('2d');
+            if (!this.canvasCtx) throw new Error('Cannot get 2D context for output canvas');
+            
+            this.stickFigureCanvas = document.getElementById('stick_figure_canvas');
+            if (!this.stickFigureCanvas) throw new Error('Stick figure canvas not found');
+            
+            this.stickFigureCtx = this.stickFigureCanvas.getContext('2d');
+            if (!this.stickFigureCtx) throw new Error('Cannot get 2D context for stick figure canvas');
+            
+            console.log('All DOM elements found successfully');
+            
+            // Initialize properties
+            this.faceMesh = null;
+            this.camera = null;
+            this.isRunning = false;
+            
+            // Face properties - Enhanced for exhibition
+            this.face = {
+                centerX: 200,
+                centerY: 180,
+                faceRadius: 120,
+                eyeLeftOpen: true,
+                eyeRightOpen: true,
+                isSmiling: false,
+                smileIntensity: 0,
+                leftEyeOpenness: 1.0,
+                rightEyeOpenness: 1.0
+            };
+            
+            console.log('Properties initialized');
+            
+            // Initialize components step by step
+            this.initializeEventListeners();
+            console.log('Event listeners initialized');
+            
+            this.initializeFaceMesh();
+            console.log('FaceMesh initialized');
+            
+            this.drawInitialFace();
+            console.log('Initial face drawn');
+            
+            console.log('FaceMotionCapture constructor completed successfully!');
+            
+        } catch (error) {
+            console.error('Error in FaceMotionCapture constructor:', error);
+            throw error;
+        }
     }
     
     initializeEventListeners() {
-        const startBtn = document.getElementById('start_btn');
-        const stopBtn = document.getElementById('stop_btn');
-        const resetBtn = document.getElementById('reset_btn');
+        console.log('Starting event listener initialization...');
         
-        startBtn.addEventListener('click', () => this.startCapture());
-        stopBtn.addEventListener('click', () => this.stopCapture());
+        const toggleBtn = document.getElementById('toggle_btn');
+        console.log('Toggle button found:', toggleBtn ? 'YES' : 'NO');
+        
+        const resetBtn = document.getElementById('reset_btn');
+        console.log('Reset button found:', resetBtn ? 'YES' : 'NO');
+        
+        if (!toggleBtn) {
+            console.error('Toggle button not found! Make sure element with id "toggle_btn" exists in the HTML.');
+            console.log('Available elements:', document.querySelectorAll('button'));
+            throw new Error('Toggle button not found');
+        }
+        
+        if (!resetBtn) {
+            console.error('Reset button not found! Make sure element with id "reset_btn" exists in the HTML.');
+            console.log('Available elements:', document.querySelectorAll('button'));
+            throw new Error('Reset button not found');
+        }
+        
+        toggleBtn.addEventListener('click', () => this.toggleCapture());
         resetBtn.addEventListener('click', () => this.resetFace());
+        
+        console.log('Event listeners initialized successfully');
     }
     
     initializeFaceMesh() {
@@ -55,13 +103,20 @@ class FaceMotionCapture {
         this.faceMesh.onResults((results) => this.onResults(results));
     }
     
+    async toggleCapture() {
+        if (this.isRunning) {
+            this.stopCapture();
+        } else {
+            await this.startCapture();
+        }
+    }
+    
     async startCapture() {
         try {
-            const startBtn = document.getElementById('start_btn');
-            const stopBtn = document.getElementById('stop_btn');
+            const toggleBtn = document.getElementById('toggle_btn');
             
-            startBtn.disabled = true;
-            startBtn.innerHTML = '<div class="loading"></div>Starting...';
+            toggleBtn.disabled = true;
+            toggleBtn.innerHTML = '<div class="loading"></div>Starting...';
             
             this.camera = new Camera(this.videoElement, {
                 onFrame: async () => {
@@ -74,9 +129,9 @@ class FaceMotionCapture {
             await this.camera.start();
             
             this.isRunning = true;
-            startBtn.style.display = 'none';
-            stopBtn.disabled = false;
-            stopBtn.style.display = 'inline-block';
+            toggleBtn.disabled = false;
+            toggleBtn.innerHTML = '⏹️ Stop Motion Capture';
+            toggleBtn.style.background = 'linear-gradient(45deg, #ff6b6b, #ee5a52)';
             
             console.log('Motion capture started successfully!');
             
@@ -84,9 +139,10 @@ class FaceMotionCapture {
             console.error('Error starting camera:', error);
             alert('Error accessing camera. Please make sure you have granted camera permissions.');
             
-            const startBtn = document.getElementById('start_btn');
-            startBtn.disabled = false;
-            startBtn.innerHTML = 'Start Motion Capture';
+            const toggleBtn = document.getElementById('toggle_btn');
+            toggleBtn.disabled = false;
+            toggleBtn.innerHTML = '🎬 Start Motion Capture';
+            toggleBtn.style.background = 'linear-gradient(45deg, #667eea, #764ba2)';
         }
     }
     
@@ -97,14 +153,11 @@ class FaceMotionCapture {
         
         this.isRunning = false;
         
-        const startBtn = document.getElementById('start_btn');
-        const stopBtn = document.getElementById('stop_btn');
+        const toggleBtn = document.getElementById('toggle_btn');
         
-        startBtn.style.display = 'inline-block';
-        startBtn.disabled = false;
-        startBtn.innerHTML = 'Start Motion Capture';
-        stopBtn.disabled = true;
-        stopBtn.style.display = 'none';
+        toggleBtn.disabled = false;
+        toggleBtn.innerHTML = '🎬 Start Motion Capture';
+        toggleBtn.style.background = 'linear-gradient(45deg, #667eea, #764ba2)';
         
         // Clear the canvas
         this.canvasCtx.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
@@ -201,8 +254,15 @@ class FaceMotionCapture {
         const canvas = this.stickFigureCanvas;
         const face = this.face;
         
-        // Clear canvas
+        // Clear canvas with subtle gradient background
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Create subtle background gradient
+        const bgGradient = ctx.createRadialGradient(200, 200, 0, 200, 200, 200);
+        bgGradient.addColorStop(0, 'rgba(102, 126, 234, 0.05)');
+        bgGradient.addColorStop(1, 'rgba(118, 75, 162, 0.02)');
+        ctx.fillStyle = bgGradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         // Save context for transformations
         ctx.save();
@@ -210,19 +270,48 @@ class FaceMotionCapture {
         // Move to center (no rotations)
         ctx.translate(face.centerX, face.centerY);
         
+        // Create face gradient
+        const faceGradient = ctx.createRadialGradient(0, -20, 0, 0, 0, face.faceRadius);
+        faceGradient.addColorStop(0, '#fff3cd');
+        faceGradient.addColorStop(0.7, '#ffeaa7');
+        faceGradient.addColorStop(1, '#fdcb6e');
+        
+        // Draw face shadow first
+        ctx.beginPath();
+        ctx.arc(3, 3, face.faceRadius, 0, 2 * Math.PI);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+        ctx.fill();
+        
         // Draw face outline (circle)
         ctx.beginPath();
         ctx.arc(0, 0, face.faceRadius, 0, 2 * Math.PI);
-        ctx.strokeStyle = '#2c3e50';
-        ctx.lineWidth = 4;
-        ctx.fillStyle = '#ffeaa7';
+        ctx.fillStyle = faceGradient;
         ctx.fill();
+        ctx.strokeStyle = '#2c3e50';
+        ctx.lineWidth = 5;
         ctx.stroke();
         
-        // Draw eyes with dynamic openness
+        // Draw eyes with dynamic openness - Enhanced for larger face
         const eyeOffset = face.faceRadius * 0.35;
         const eyeY = -face.faceRadius * 0.2;
-        const eyeRadius = 8;
+        const eyeRadius = Math.max(12, face.faceRadius * 0.12);
+        
+        // Add eyebrows for more expression
+        ctx.strokeStyle = '#2c3e50';
+        ctx.lineWidth = 4;
+        ctx.lineCap = 'round';
+        
+        // Left eyebrow
+        ctx.beginPath();
+        ctx.moveTo(-eyeOffset - eyeRadius * 0.8, eyeY - eyeRadius * 1.5);
+        ctx.lineTo(-eyeOffset + eyeRadius * 0.8, eyeY - eyeRadius * 1.2);
+        ctx.stroke();
+        
+        // Right eyebrow
+        ctx.beginPath();
+        ctx.moveTo(eyeOffset - eyeRadius * 0.8, eyeY - eyeRadius * 1.2);
+        ctx.lineTo(eyeOffset + eyeRadius * 0.8, eyeY - eyeRadius * 1.5);
+        ctx.stroke();
         
         // Left eye
         ctx.beginPath();
@@ -276,47 +365,79 @@ class FaceMotionCapture {
             ctx.stroke();
         }
         
-        // Draw nose
+        // Draw nose - Enhanced for larger face
+        const noseY = eyeY + face.faceRadius * 0.3;
+        const noseSize = face.faceRadius * 0.08;
+        
         ctx.beginPath();
-        ctx.moveTo(0, eyeY + 15);
-        ctx.lineTo(-3, eyeY + 25);
-        ctx.lineTo(3, eyeY + 25);
+        ctx.moveTo(0, noseY - noseSize);
+        ctx.lineTo(-noseSize * 0.6, noseY);
+        ctx.lineTo(noseSize * 0.6, noseY);
         ctx.strokeStyle = '#2c3e50';
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
         ctx.stroke();
         
-        // Draw mouth - smile or neutral based on detection
+        // Add nostrils
+        ctx.beginPath();
+        ctx.arc(-noseSize * 0.3, noseY - 2, 2, 0, 2 * Math.PI);
+        ctx.arc(noseSize * 0.3, noseY - 2, 2, 0, 2 * Math.PI);
+        ctx.fillStyle = '#2c3e50';
+        ctx.fill();
+        
+        // Draw mouth - smile or neutral based on detection - Enhanced for larger face
         const mouthY = face.faceRadius * 0.35;
         const mouthWidth = face.faceRadius * 0.5;
         
         ctx.beginPath();
         if (face.isSmiling) {
-            // Draw clear smile - upward curving arc
+            // Draw clear smile - upward curving arc with gradient
             const smileRadius = mouthWidth * 0.8;
-            const smileDepth = 8 + (face.smileIntensity * 12); // How deep the smile curve is
+            const smileDepth = 12 + (face.smileIntensity * 18); // Enhanced smile depth
             
             // Create a smile arc that curves upward
             ctx.arc(0, mouthY - smileDepth, smileRadius, 0.3, Math.PI - 0.3);
             
-            // Make smile very visible
-            ctx.strokeStyle = '#e74c3c'; // Red color for smile
-            ctx.lineWidth = 5;
+            // Make smile very visible with gradient
+            const smileGradient = ctx.createLinearGradient(-mouthWidth/2, mouthY, mouthWidth/2, mouthY);
+            smileGradient.addColorStop(0, '#e74c3c');
+            smileGradient.addColorStop(0.5, '#c0392b');
+            smileGradient.addColorStop(1, '#e74c3c');
+            
+            ctx.strokeStyle = smileGradient;
+            ctx.lineWidth = 6;
             ctx.lineCap = 'round';
-        } else {
-            // Draw neutral mouth - straight line
-            ctx.moveTo(-mouthWidth/2, mouthY);
-            ctx.lineTo(mouthWidth/2, mouthY);
-            ctx.strokeStyle = '#2c3e50';
-            ctx.lineWidth = 3;
-            ctx.lineCap = 'round';
-        }
-        ctx.stroke();
-        
-        // Add subtle mouth corners for neutral expression
-        if (!face.isSmiling) {
+            ctx.stroke();
+            
+            // Add smile highlights
             ctx.beginPath();
-            ctx.arc(-mouthWidth/2, mouthY, 2, 0, 2 * Math.PI);
-            ctx.arc(mouthWidth/2, mouthY, 2, 0, 2 * Math.PI);
+            ctx.arc(0, mouthY - smileDepth, smileRadius, 0.4, Math.PI - 0.4);
+            ctx.strokeStyle = 'rgba(231, 76, 60, 0.3)';
+            ctx.lineWidth = 8;
+            ctx.stroke();
+            
+        } else {
+            // Draw neutral mouth - slightly curved line with gradient
+            const controlY = mouthY + 2;
+            
+            ctx.beginPath();
+            ctx.moveTo(-mouthWidth/2, mouthY);
+            ctx.quadraticCurveTo(0, controlY, mouthWidth/2, mouthY);
+            
+            const neutralGradient = ctx.createLinearGradient(-mouthWidth/2, mouthY, mouthWidth/2, mouthY);
+            neutralGradient.addColorStop(0, '#2c3e50');
+            neutralGradient.addColorStop(0.5, '#34495e');
+            neutralGradient.addColorStop(1, '#2c3e50');
+            
+            ctx.strokeStyle = neutralGradient;
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+            
+            // Add subtle mouth corners for neutral expression
+            ctx.beginPath();
+            ctx.arc(-mouthWidth/2, mouthY, 3, 0, 2 * Math.PI);
+            ctx.arc(mouthWidth/2, mouthY, 3, 0, 2 * Math.PI);
             ctx.fillStyle = '#2c3e50';
             ctx.fill();
         }
